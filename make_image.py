@@ -5,6 +5,7 @@ import os.path
 import re
 import subprocess
 import sys
+import random
 
 VERSIONS = {
     "dev-441": {
@@ -135,19 +136,31 @@ if args.output:
 cmd_args = []
 for k,v in build_args.items():
     cmd_args.extend(['--build-arg', '{}={}'.format(k,v)])
+cmd_args_base = cmd_args.copy()
 if dockerfile:
-    cmd_args.extend(['-f', dockerfile])
+    cmd_args_base.extend(['-f', dockerfile + '_indy'])
+    cmd_args.extend(['-f', dockerfile + '_von'])
 if args.no_cache:
+    cmd_args_base.append('--no-cache')
     cmd_args.append('--no-cache')
 if args.squash:
+    cmd_args_base.append('--squash')
     cmd_args.append('--squash')
+cmd_args_base.extend(['-t', 'local_indy_base'])
 cmd_args.extend(['-t', tag])
+cmd_args.extend(['--build-arg', 'CACHEBUST=' + str(random.randint(100000,999999))])
+cmd_args_base.append(target)
 cmd_args.append(target)
+cmd_base = ['docker', 'build'] + cmd_args_base
 cmd = ['docker', 'build'] + cmd_args
 if args.dry_run:
     print(' '.join(cmd))
 else:
     print('Building docker image...')
+    proc = subprocess.run(cmd_base, stdout=(subprocess.PIPE if args.quiet else None))
+    if proc.returncode:
+        print('build failed')
+        sys.exit(1)
     proc = subprocess.run(cmd, stdout=(subprocess.PIPE if args.quiet else None))
     if proc.returncode:
         print('build failed')
@@ -167,6 +180,7 @@ if args.s2i:
     if args.dry_run:
         print(' '.join(s2i_cmd))
     else:
+        print(s2i_cmd)
         proc = subprocess.run(s2i_cmd, stdout=(subprocess.PIPE if args.quiet else None))
         if proc.returncode:
             print('s2i build failed')
