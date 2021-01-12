@@ -6,3 +6,5 @@ cchardet~=2.1.0
 rlp~=0.6.0
 indy-node==1.12.3
 git+https://github.com/hyperledger/indy-plenum.git@a5941cb9d9faea4601ba2ad4e8c5fc070d5075df#egg=indy-plenum
+#indy-node==1.12.4
+#git+https://github.com/hyperledger/indy-plenum.git@3ce52f5930de455aca86b24ef3b7d3025297a605#egg=indy-plenum

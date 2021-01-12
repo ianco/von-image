@@ -45,6 +45,18 @@ VERSIONS = {
         },
         "python_version": PY_36_VERSION,
     },
+    "1.13": {
+        "path": "node-1.12",
+        "version": "node-1.13",
+        "args": {
+            # 1.16.0 release
+            "indy_sdk_url": "https://codeload.github.com/hyperledger/indy-sdk/tar.gz/f85afd2f94959eb59522e5dda160d2c7fdd1a4ba",
+            # 0.3.2
+            "ursa_url": "https://codeload.github.com/hyperledger/ursa/tar.gz/394bcdf1413ac41793e96175d46d745ed6ffd970",
+            "rust_version": "1.45.0",
+        },
+        "python_version": PY_36_VERSION,
+    },
 }
 
 
